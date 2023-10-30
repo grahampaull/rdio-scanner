@@ -1,14 +1,14 @@
-<div class="rdio-status">
+<!-- <div class="rdio-status">
     <div class="branding">{{ branding }}</div>
     <div class="led" [ngClass]="ledStyle"></div>
-</div>
+</div> -->
 <div class="rdio-display" [ngClass]="{ idle: !dimmer }" (dblclick)="toggleFullscreen.emit()">
     <div class="row">
         <div>
             <span>{{ clock | date:timeFormat }}</span>
         </div>
         <div *ngIf="!linked">
-            <span>NO LINK</span>
+            <span>DISCONNECTED</span>
         </div>
         <div *ngIf="linked && showListenersCount">
             <span>L: {{ listeners }}</span>
@@ -36,24 +36,33 @@
         </div>
     </div>
     <div class="row big">
+        <span></span>
+    </div>
+    <div class="row big">
         <span>{{ callTalkgroupName }}</span>
+    </div>
+    <div class="row uid">
+        <span *ngIf="callUnit">{{ callUnit }}</span>
+    </div>
+    <div class="row big">
+        <span></span>
     </div>
     <div class="row">
         <div>
-            <span>F: {{ callFrequency || 0 }}</span>
+            <span>FREQ: {{ callFrequency || 0 }}</span>
         </div>
         <div>
             <span>TGID: {{ callTalkgroupId || 0 }}</span>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div>
             <span>E: {{ callError || 0 }} S: {{ callSpike || 0 }}</span>
         </div>
         <div>
             <span *ngIf="callUnit">UID: {{ callUnit }}</span>
         </div>
-    </div>
+    </div> -->
     <div class="row right small">
         <div *ngIf="tempAvoid">
             <span class="flag" [ngClass]="{ flaged: avoided || patched }">&#x23f2;&#xFE0E; {{ tempAvoid }}M</span>
@@ -159,8 +168,8 @@
         </button>
     </div>
 </div>
-<div class="rdio-help" *ngIf="email">
+<!-- <div class="rdio-help" *ngIf="email">
     <button mat-icon-button (click)="showHelp()">
         <mat-icon>help_center</mat-icon>
     </button>
-</div>
+</div> -->
