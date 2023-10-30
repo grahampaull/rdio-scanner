@@ -72,3 +72,5 @@ You can enjoy your [Rdio Scanner](https://github.com/chuot/rdio-scanner) on the 
 Commercial support is available at **[https://saubeo.solutions/](https://saubeo.solutions)**.
 
 **Happy Rdio scanning !**
+
+Latest Here!
