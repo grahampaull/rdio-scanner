@@ -1,8 +1,8 @@
 {
-  "name": "Rdio Scanner",
-  "short_name": "Rdio Scanner",
-  "theme_color": "#1e1e1e",
-  "background_color": "#1e1e1e",
+  "name": "N.I Scanner",
+  "short_name": "N.I Scanner",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "./",

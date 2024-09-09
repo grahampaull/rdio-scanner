@@ -123,6 +123,8 @@ export class RdioScannerService implements OnDestroy {
         this.readLivefeedMap();
 
         this.openWebsocket();
+
+        // this.startLivefeed();
     }
 
     authenticate(password: string): void {

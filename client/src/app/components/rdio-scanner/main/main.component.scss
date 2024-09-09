@@ -6,6 +6,7 @@
   min-width: 0;
   padding: 0px;
   user-select: none;
+  background-color: #000000;
 }
 
 .rdio-control {
@@ -19,6 +20,8 @@
       box-sizing: content-box;
       flex: 1;
       line-height: normal;
+      background-color: #000000;
+      opacity: 0.4;
     }
 
     .spacer {
@@ -29,22 +32,26 @@
 }
 
 .rdio-display {
-  background: rgb(209, 238, 238);
-  box-shadow: 2px 2px 4px rgb(0, 0, 0) inset, 1px 1px 2px 1px rgb(255, 255, 255);
-  color: rgba(0, 0, 0, 0.8);
+  // background: rgb(209, 238, 238);
+  background: #000000;
+  // box-shadow: 2px 2px 4px rgb(0, 0, 0) inset, 1px 1px 2px 1px rgb(255, 255, 255);
+  // color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
   cursor: default;
   display: block;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
-  padding: 8px;
+  padding: 3px;
 
   &.idle {
-    background: rgb(190, 190, 174);
+    // background: rgb(190, 190, 174);
+    background: #000000;
 
     .avoid,
     .patched {
-      color: rgb(190, 190, 174);
+      // color: rgb(190, 190, 174);
+      color: #ffffff;
     }
   }
 
@@ -70,7 +77,7 @@
       visibility: visible;
     }
 
-    > form {
+    >form {
       background: rgb(240, 240, 240);
       border-radius: 8px;
       padding: 8px 32px;
@@ -172,7 +179,7 @@
       }
     }
 
-    tbody > tr {
+    tbody>tr {
       border-top: 1px solid rgba(0, 0, 0, 0.2);
     }
   }
@@ -202,7 +209,7 @@
     background: rgb(80, 80, 80);
     display: block;
     height: 12px;
-    margin-left: 24px;
+    margin-left: 5px;
     width: 24px;
 
     &.on {
@@ -265,7 +272,7 @@
 
 .rdio-display,
 .rdio-status {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .rdio-help {
@@ -273,4 +280,18 @@
   opacity: 0.3;
   position: absolute;
   right: 24px;
+}
+
+.rdio-button:hover {
+  border: 1px solid lightgray;
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.flash {
+  animation: flash 1s infinite;
 }

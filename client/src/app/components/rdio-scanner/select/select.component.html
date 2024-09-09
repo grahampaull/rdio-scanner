@@ -14,10 +14,10 @@
 </fieldset>
 <ng-container *ngFor="let system of systems">
     <fieldset *ngIf="system.talkgroups.length" class="fieldset">
-        <legend>
+        <legend (click)="toggleDivVisibility(system.id.toString())">
             {{ system.label }}
         </legend>
-        <div>
+        <div *ngIf="toggleVisibility[system.id.toString()]">
             <button *ngFor="let talkgroup of system.talkgroups" class="rdio-button"
                 [ngClass]="{ off: !(map[system.id] && map[system.id][talkgroup.id]).active, on: map[system.id] && map[system.id][talkgroup.id].active, blink: map[system.id][talkgroup.id].minutes }"
                 (click)="avoid({ system: system, talkgroup: talkgroup })">

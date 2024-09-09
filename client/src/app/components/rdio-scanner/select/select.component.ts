@@ -46,10 +46,19 @@ export class RdioScannerSelectComponent implements OnDestroy {
 
     tagsToggle: boolean | undefined;
 
+    // Add this line to track visibility for each system
+    toggleVisibility: { [key: string]: boolean } = {};
+    
+
     private eventSubscription = this.rdioScannerService.event.subscribe((event: RdioScannerEvent) => this.eventHandler(event));
 
     constructor(private rdioScannerService: RdioScannerService) { }
 
+    // Add this method to toggle the visibility
+    toggleDivVisibility(systemId: string): void {
+        this.toggleVisibility[systemId] = !this.toggleVisibility[systemId];
+    }
+    
     avoid(options?: RdioScannerAvoidOptions): void {
         if (options?.all == true) {
             this.rdioScannerService.beep(RdioScannerBeepStyle.Activate);
@@ -87,6 +96,13 @@ export class RdioScannerSelectComponent implements OnDestroy {
         if (event.config) {
             this.tagsToggle = event.config.tagsToggle;
             this.systems = event.config.systems;
+    
+            // Initialize the visibility state for each system to true (open by default)
+            if (this.systems) {
+                this.systems.forEach(system => {
+                    this.toggleVisibility[system.id.toString()] = true; // set to true by default
+                });
+            }
         }
         if (event.categories) this.categories = event.categories;
         if (event.map) this.map = event.map;

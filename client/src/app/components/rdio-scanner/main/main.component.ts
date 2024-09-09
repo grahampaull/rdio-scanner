@@ -50,12 +50,13 @@ export class RdioScannerMainComponent implements OnDestroy, OnInit {
     avoided = false;
 
     branding = '';
+    
 
     call: RdioScannerCall | undefined;
     callDate: Date | undefined;
     callError = '0';
     callFrequency: string = this.formatFrequency(0);
-    callHistory: RdioScannerCall[] = new Array<RdioScannerCall>(11);
+    callHistory: RdioScannerCall[] = new Array<RdioScannerCall>(4);
     callPrevious: RdioScannerCall | undefined;
     callProgress = new Date(0, 0, 0, 0, 0, 0);
     callQueue = 0;
@@ -74,7 +75,7 @@ export class RdioScannerMainComponent implements OnDestroy, OnInit {
     //
     // Be respectful, sponsor the project if you can, use native apps when possible.
     //
-    callTalkgroupName = `Rdio Scanner v${packageInfo.version}`;
+    callTalkgroupName = `N.I Scanner`;
     //
     // END OF RED TAPE.
     //

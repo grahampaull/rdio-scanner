@@ -1,23 +1,32 @@
-<!-- <div class="rdio-status">
-    <div class="branding">{{ branding }}</div>
-    <div class="led" [ngClass]="ledStyle"></div>
-</div> -->
-<div class="rdio-display" [ngClass]="{ idle: !dimmer }" (dblclick)="toggleFullscreen.emit()">
+<div class="rdio-display" (dblclick)="toggleFullscreen.emit()">
     <div class="row">
-        <div>
-            <span>{{ clock | date:timeFormat }}</span>
+        <div *ngIf="linked && showListenersCount">
+            <span style="color: rgb(0, 102, 255); font-weight: bold;">
+                <span class="material-symbols-outlined">
+                    cell_tower
+                </span>
+            </span>
         </div>
         <div *ngIf="!linked">
-            <span>DISCONNECTED</span>
-        </div>
-        <div *ngIf="linked && showListenersCount">
-            <span>L: {{ listeners }}</span>
+            <span style="color: red; font-weight: bold;">
+                <span class="material-symbols-outlined">
+                    signal_disconnected
+                </span>
+            </span>
         </div>
         <div>
-            <span>Q: {{ callQueue }}</span>
+            <span [ngStyle]="{
+                                'color': callQueue == 0 ? 'white' : 
+                                        callQueue > 0 && callQueue <= 10 ? 'green' : 
+                                        callQueue > 10 && callQueue <= 30 ? 'orange' : 
+                                        callQueue > 30 && callQueue <= 50 ? 'darkorange' : 
+                                        'red',
+                                'font-weight': 'bold'
+                            }" [ngClass]="{ 'flash': callQueue > 50 }">
+                QUEUE: {{ callQueue }}
+            </span>
         </div>
     </div>
-    <div class="row small"></div>
     <div class="row">
         <div>
             <span>{{ callSystem }}</span>
@@ -31,22 +40,45 @@
             <span>{{ callTalkgroup }}</span>
         </div>
         <div>
-            <span>{{ callDate | date:'MM/dd' }} </span>
+            <span>{{ callDate | date:'MM/dd' }}</span>
             <span>{{ callProgress | date:timeFormat }}</span>
         </div>
     </div>
+
     <div class="row big">
         <span></span>
     </div>
+
     <div class="row big">
-        <span>{{ callTalkgroupName }}</span>
+        <span>
+            <!-- (H) is always blue if holdTg is true -->
+            <span [style.color]="'rgb(0, 102, 255)'">
+                {{ holdTg ? '(H) ' : '' }}
+            </span>
+    
+            <!-- callTalkgroupName turns green when LED is on, and otherwise respects holdTg -->
+            <span 
+                *ngIf="ledStyle.includes('on'); else defaultStyle" 
+                [style.color]="'green'">
+                {{ callTalkgroupName }}
+            </span>
+    
+            <ng-template #defaultStyle>
+                <span [style.color]="holdTg ? 'rgb(0, 102, 255)' : 'inherit'">
+                    {{ callTalkgroupName }}
+                </span>
+            </ng-template>
+        </span>
     </div>
+
     <div class="row uid">
         <span *ngIf="callUnit">{{ callUnit }}</span>
     </div>
+
     <div class="row big">
         <span></span>
     </div>
+
     <div class="row">
         <div>
             <span>FREQ: {{ callFrequency || 0 }}</span>
@@ -55,14 +87,7 @@
             <span>TGID: {{ callTalkgroupId || 0 }}</span>
         </div>
     </div>
-    <!-- <div class="row">
-        <div>
-            <span>E: {{ callError || 0 }} S: {{ callSpike || 0 }}</span>
-        </div>
-        <div>
-            <span *ngIf="callUnit">UID: {{ callUnit }}</span>
-        </div>
-    </div> -->
+
     <div class="row right small">
         <div *ngIf="tempAvoid">
             <span class="flag" [ngClass]="{ flaged: avoided || patched }">&#x23f2;&#xFE0E; {{ tempAvoid }}M</span>
@@ -92,35 +117,15 @@
         <table class="history">
             <thead>
                 <tr>
-                    <th>
-                        <span>Time</span>
-                    </th>
-                    <th>
-                        <span>System</span>
-                    </th>
-                    <th>
-                        <span>Talkgroup</span>
-                    </th>
-                    <th>
-                        <span>Name</span>
-                    </th>
+                    <th>Time</th>
+                    <th>Name</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let previousCall of callHistory"
-                    [ngClass]="{ 'replaying': previousCall?.id !== null && previousCall?.id === call?.id} ">
-                    <td>
-                        <span>{{ previousCall?.dateTime | date:timeFormat }}</span>
-                    </td>
-                    <td>
-                        <span>{{ previousCall?.systemData?.label || previousCall?.system}}</span>
-                    </td>
-                    <td>
-                        <span>{{ previousCall?.talkgroupData?.label || previousCall?.talkgroup }}</span>
-                    </td>
-                    <td>
-                        <span>{{ previousCall?.talkgroupData?.name || previousCall?.frequency }}</span>
-                    </td>
+                    [ngClass]="{ 'replaying': previousCall?.id !== null && previousCall?.id === call?.id}">
+                    <td>{{ previousCall?.dateTime | date:timeFormat }}</td>
+                    <td>{{ previousCall?.talkgroupData?.name || previousCall?.frequency }}</td>
                 </tr>
             </tbody>
         </table>
@@ -130,57 +135,21 @@
     <div class="row">
         <button class="rdio-button" (click)="livefeed()"
             [ngClass]="{ off: livefeedOffline && !playbackMode, on: livefeedOnline, partial: playbackMode }">
-            LIVE FEED
+            <span *ngIf="livefeedOffline; else showStop">START</span>
+            <ng-template #showStop>STOP</ng-template>
         </button>
-        <!-- <div class="spacer"></div>
-        <button class="rdio-button" (click)="holdSystem()" [ngClass]="{ off: !holdSys, on: holdSys }">
-            HOLD SYS
-        </button> -->
         <div class="spacer"></div>
-        <button class="rdio-button" (click)="skip()">
-            SKIP
-        </button>
+        <button class="rdio-button" (click)="skip()">SKIP</button>
         <div class="spacer"></div>
         <button class="rdio-button" (click)="holdTalkgroup()" [ngClass]="{ off: !holdTg, on: holdTg }">
-            HOLD TG
+            {{ holdTg ? 'TG HELD' : 'HOLD TG' }}
         </button>
     </div>
     <div class="row">
-        <button class="rdio-button" (click)="avoid()">
-            AVOID
-        </button>
-        <!-- <div class="spacer"></div>
-        <button class="rdio-button" (click)="skip()">
-            SKIP
-        </button> -->
+        <button class="rdio-button" (click)="avoid()">AVOID</button>
         <div class="spacer"></div>
-        <button class="rdio-button" (click)="showSearchPanel()">
-            CALLS
-        </button>
+        <button class="rdio-button" (click)="showSearchPanel()">REPLAY</button>
         <div class="spacer"></div>
-        <button class="rdio-button" (click)="showSelectPanel()">
-            T-GROUPS
-        </button>
-        <!-- <button class="rdio-button" (click)="replay()">
-            REPLAY
-        </button> -->
+        <button class="rdio-button" (click)="showSelectPanel()">T-GROUPS</button>
     </div>
-    <!-- <div class="row">
-        <button class="rdio-button" (click)="showSearchPanel()">
-            CALLS
-        </button>
-        <div class="spacer"></div>
-        <button class="rdio-button" (click)="pause()" [ngClass]="{ off: !livefeedPaused, on: livefeedPaused }">
-            PAUSE
-        </button>
-        <div class="spacer"></div>
-        <button class="rdio-button" (click)="showSelectPanel()">
-            TGs
-        </button>
-    </div> -->
 </div>
-<!-- <div class="rdio-help" *ngIf="email">
-    <button mat-icon-button (click)="showHelp()">
-        <mat-icon>help_center</mat-icon>
-    </button>
-</div> -->

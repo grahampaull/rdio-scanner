@@ -6,9 +6,8 @@
 }
 
 .rdio-button-mini {
-  &:nth-last-child(2) {
-    margin-left: auto;
-  }
+  width: calc(50% - 4px); /* Make the button take 50% of the width */
+  margin-bottom: 4px;
 
   &.all-off {
     background: rgb(100, 50, 50);
@@ -38,36 +37,33 @@
 
   > div {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    flex-direction: row; /* Keep the row direction */
+    flex-wrap: wrap; /* Allow wrapping to the next line */
+    justify-content: space-between;
   }
 }
 
 .rdio-button {
-  width: calc(25% - 4px);
-}
-
-.rdio-button-mini {
-  width: calc(12.5% - 4px);
+  width: calc(50% - 4px); /* Make each button take 50% of the width */
+  margin-bottom: 4px; /* Add some spacing between buttons */
 }
 
 @media (min-width: 720px) {
   .rdio-button {
-    width: calc(20% - 4px);
+    width: calc(50% - 4px); /* Keep the same width for larger screens */
   }
 
   .rdio-button-mini {
-    width: calc(10% - 4px);
+    width: calc(50% - 4px);
   }
 }
 
 @media (min-width: 1200px) {
   .rdio-button {
-    width: calc(10% - 4px);
+    width: calc(50% - 4px); /* Keep the same width for larger screens */
   }
 
   .rdio-button-mini {
-    width: calc(5% - 4px);
+    width: calc(50% - 4px);
   }
 }

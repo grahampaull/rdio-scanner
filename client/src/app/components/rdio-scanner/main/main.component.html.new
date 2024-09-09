@@ -1,0 +1,103 @@
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Rescue Service</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: navy;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .container-fluid {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .btn {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+  </head>
+  <body >
+    <div class="container-fluid" (dblclick)="toggleFullscreen.emit()">
+      <div class="container-fluid" >
+        <div class="row mb-3">
+          <div class="col-2">
+            <h5>{{ clock | date:timeFormat }}</h5>
+          </div>
+          <div *ngIf="!linked" class="col-8 text-center">
+            <h5>DISCONNECTED</h5>
+          </div>
+          <div *ngIf="linked && showListenersCount" class="col-8 text-center">
+            <h5>L: {{ listeners }}</h5>
+          </div>
+          <div class="col-2 text-end">
+            <h5>Q: {{ callQueue }}</h5>
+          </div>
+        </div>
+        <br/><br/><br/><br/>
+        <div class="row mb-4 text-center">
+          <div class="col">
+            <span style="font-size: 35px;">{{ callSystem }}</span>
+          </div>
+        </div>
+        <div class="row mb-4 text-center">
+          <div class="col">
+            <span style="font-size: 65px;">{{ callTalkgroupName }}</span>
+            <br/>
+            <span>UID: {{ callTalkgroupId || 0 }}</span> <span *ngIf="callUnit">{{ callUnit }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+            <button class="btn btn-primary btn-lg w-100" (click)="livefeed()">LIVE FEED</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-primary btn-lg w-100" (click)="holdTalkgroup()">HOLD TG</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-primary btn-lg w-100" (click)="holdSystem()">HOLD SYS</button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-4">
+          <button class="btn btn-secondary btn-lg w-100" (click)="avoid()">AVOID</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-secondary btn-lg w-100" (click)="skip()">SKIP</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-secondary btn-lg w-100" (click)="showSelectPanel()">SELECT TG</button>
+        </div>
+      </div>
+      <div class="auth" [ngClass]="{ visible: auth }">
+        <form class="mat-elevation-z8" autocomplete="off" [formGroup]="authForm" (ngSubmit)="authenticate()">
+            <mat-form-field>
+                <input #password matInput type="password" autocomplete="off" formControlName="password"
+                    placeholder="Unlock code" (blur)="authFocus()">
+                <mat-error *ngIf="authForm.get('password')?.hasError('expired')">
+                    This unlock code has expired
+                </mat-error>
+                <mat-error *ngIf="authForm.get('password')?.hasError('tooMany')">
+                    Too many connections
+                </mat-error>
+            </mat-form-field>
+        </form>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
